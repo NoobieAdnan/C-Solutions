@@ -1,0 +1,120 @@
+/*Message Queue Server*/
+/*Opening this file File -1*/
+/*Create on Message Queue in the the Kernel
+Mounting the message queue filesystem
+On Linux, message queues are created in a virtual filesystem.  (Other implementations may also  provide  such  a  feature,  
+but  the details are likely to differ.)  This filesystem can be mounted (by the superuser) using the following commands:
+
+# mkdir /dev/mqueue
+# mount -t mqueue none /dev/mqueue*/
+
+/*More Information can be get from man pages of the man mq_overview*/
+
+
+#include <stdio.h>
+#include <sys/ipc.h>
+#include <sys/types.h>
+#include <sys/msg.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <mqueue.h>
+#define MAX_MSG_SIZE 256 
+#define MSG 20
+#define BUFF_SIZE 256
+int main ()
+{   
+    int fd  ;
+    int count ;
+    char buffer[BUFF_SIZE] ;
+    mqd_t mqdes ;
+    int c =  1;
+
+    struct mq_attr attr ; 
+
+    attr.mq_maxmsg = MSG ;
+    attr.mq_msgsize = MAX_MSG_SIZE ; 
+
+    int status ;
+    mqdes = mq_open ("/myqueue",O_CREAT|O_RDWR, 0666,&attr) ;
+
+    if (mqdes == -1)
+        printf ("Unable to Open the Message Queue:\n");
+
+    while (1) {
+
+        status = mq_receive (mqdes ,buffer ,MAX_MSG_SIZE ,&c) ;
+        
+        if (status == -1 )
+            printf ("Unable to receive Message:\n");
+        printf ("The Message received is %s\n",buffer );
+        
+        printf ("Enter the Message to be Send:\n");
+        fgets (buffer ,sizeof (buffer), stdin ) ;
+
+        status = mq_send (mqdes ,buffer ,MAX_MSG_SIZE ,c) ;
+        c++ ; 
+        if (status == -1)
+            printf ("Unable to Send Message:\n") ;
+        
+        printf ("The Message Sent is %s\n",buffer );  
+        }
+        mq_close (mqdes) ;
+        mq_unlink ("/myqueu");
+        return 0 ;
+} 
+/*Closure of the File-1*/
+/*Copy this File and run both the Program in different terminals*/
+/*Opening of the File -2 Client */
+#include <stdio.h>
+#include <sys/ipc.h>
+#include <sys/types.h>
+#include <sys/msg.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <mqueue.h>
+#define MAX_MSG_SIZE 256 
+#define MSG 20
+#define BUFF_SIZE 256
+int main ()
+{   
+    int fd  ;
+    int count ;
+    char buffer[BUFF_SIZE] ;
+    mqd_t mqdes ;
+    int c =  1;
+
+    struct mq_attr attr ; 
+
+    attr.mq_maxmsg = MSG ;
+    attr.mq_msgsize = MAX_MSG_SIZE ; 
+
+    int status ;
+    mqdes = mq_open ("/myqueue",O_CREAT|O_RDWR, 0666,&attr) ;
+
+    if (mqdes == -1)
+        printf ("Unable to Open the Message Queue:\n");
+
+    while (1) {
+
+        printf ("Enter the Message to be Send:\n");
+        fgets (buffer ,sizeof (buffer), stdin ) ;
+
+        status = mq_send (mqdes ,buffer ,MAX_MSG_SIZE ,c) ;
+        c++ ; 
+        if (status == -1)
+            printf ("Unable to Send Message:\n") ;
+        
+        printf ("The Message Sent is %s\n",buffer );
+       
+        status = mq_receive (mqdes ,buffer ,MAX_MSG_SIZE ,&c) ;
+        
+        if (status == -1 )
+            printf ("Unable to receive Message:\n");
+        printf ("The Message received is %s\n",buffer );
+        
+        }
+        mq_close (mqdes) ;
+        mq_unlink ("/myqueu");
+        return 0 ;
+} 
+/*Closure of the File -2 */
