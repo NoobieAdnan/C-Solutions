@@ -1,0 +1,173 @@
+/* Shared memory without Semaphores- (Part-1)*/
+/* Opening of the File - 1*/ 
+#include <stdio.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+#define SIZE 100
+#define MAX 10
+
+int main(void)
+{
+	int shm_id ; /*to hold shared mem descriptor*/
+	int ret_value ;
+	int *ptr = NULL ; /*to hold the base address of shared memory*/
+	int i ; /* for loop*/    
+
+	/*creating shared memory*/
+
+	shm_id = shm_open ("/sh_mem", O_RDWR|O_CREAT, 0666) ;
+
+	/* handling failure consition */
+
+	if ( (-1) == shm_id ) {
+		perror ("shm_open") ;
+		return -1 ;
+	}
+
+	/* setting file size */
+
+	ret_value = ftruncate(shm_id, SIZE) ;
+
+	/* handling failure consition */
+
+	if ( (-1) == ret_value ) {
+		perror ("ftruncate") ;
+		return -1 ;
+	}
+
+	/* creating a new mapping in virtual address space */
+
+	ptr = mmap (NULL, SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, shm_id, 0) ;
+
+	/* handling failure consition */
+
+	if ( (void *)(-1) == ptr ) {
+		perror ("mmap") ;
+		return -1 ;
+	} 
+
+	ptr[0] = 1 ; /* locking the shared memory */
+
+	/* scanning input */
+
+	for ( i = 1 ; i < MAX ; i++ ) {
+		scanf ("%d", &ptr[i]) ;
+	} 
+
+	ptr[0] = 0 ;/*releasing the lock of shared memory*/
+
+	sleep(5) ;
+
+	/* again waiting for lock, after getting the lock, locking the shared 
+	 * resource */
+
+	if ( 0 == ptr[0] ) {
+
+		/* printing the modified shared memory constents */
+
+		for ( i = 0 ; i < MAX ; i++ ) {
+			printf ("%d", ptr[i]) ;
+		}
+	}
+
+	return 0 ;
+
+}
+/*Closure of the File - 1*/
+
+/*Copy this into some Other C file and Execute both the files one after another*/
+/*Shared Memory without Semaphores (Part-2)*/
+/*Opening of the File-2*/ 
+
+#include <stdio.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+#define SIZE 100
+#define MAX 10
+
+int main(void)
+{
+	int shm_id ; /*to hold shared memory descriptor*/
+	int ret_value ;
+	int *ptr = NULL ;/*to hold the base address of shared memory*/
+	int i ; /*for loop*/
+
+	/*opening an existing shared memory*/
+
+	shm_id = shm_open ("/sh_mem", O_RDWR, 0666) ;
+
+	/*handling failure condition*/
+
+	if ( (-1) == shm_id ) {
+		perror ("shm_open") ;
+		return -1 ;
+	}
+
+
+	/*Creating a new mapping in Virtual address space*/
+
+	ptr = mmap (NULL, SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, shm_id, 0) ;
+
+	/* handling failure condition */
+
+	if ( (void *)(-1) == ptr ) {
+		perror ("mmap") ;
+		return -1 ;
+	} 
+
+	/* waiting for lock and after getting lock, locking the semaphore */
+
+	if ( 0 == ptr[0] ) {
+
+		ptr[0] = 1 ; /* locking the shared memory */
+
+		/* accessing shared memory contents*/
+
+		for ( i = 0 ; i < MAX ; i++ ) {
+			printf ("%d", ptr[i]) ;
+		}
+
+		/* modifiying shared memory contents*/
+
+		for ( i = 1 ; i < MAX ; i++ ) {
+			ptr[i] = 0 ;
+		}
+	}
+
+	/* releasing the lock */
+
+	ptr[0] = 0 ;
+
+	/* detaching the shared memory segment */
+
+	ret_value = shm_unlink("/sh_mem") ;
+
+	/*handling failure condition */
+
+	if ( (-1) == ret_value ) {
+		perror ("shm_unlink") ;
+		return -1 ;
+	} 
+
+	/* unmapping */
+
+	ret_value = munmap ((void *)ptr, SIZE) ;
+
+	/* handling failure condition */
+	if ( (-1) == ret_value ) {
+		perror ("munmap") ;
+		return -1 ;
+	} 
+
+	return 0 ;
+
+}
+/*Closure of the the the file*/
