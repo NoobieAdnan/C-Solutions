@@ -1,2 +1,2 @@
 # GE_ASSIGNMENTS
-Simple Codings
+Sample Codings IOntermediate level for Inter-process Communication
