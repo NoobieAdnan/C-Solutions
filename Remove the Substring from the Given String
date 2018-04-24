@@ -1,0 +1,53 @@
+/*Function char *remsstr(char *str, const char *sstr), which  checks for
+  the substring sstr in str and if found removes the substring sstr in
+  string str and returns the modified string str. If the substring sstr
+  is not found, it returns the original string str.*/
+
+char *remsstr(char *str, char *rstr)
+{
+	int i=0,c=0,j=0;
+	if(strcmp1(str,rstr)==0)
+		  return str;
+	if(findSubstring(str,rstr)==1){
+		  while(str[i] != '\0' || rstr[j] != '\0' ){
+				  if(str[i]!= rstr[j]){
+				      *(temp +c) = *(str + i);
+				      i++;
+				      c++;
+		      }  		
+	        if(str[i]== rstr[j]){
+			        i++;
+			        j++;
+          }
+		  }
+			
+		  temp[c] = '\0'; 
+		  return temp;
+ }
+ else{
+     return str;
+  }
+return NULL ;
+}
+
+/*Function to check wheather the rstr is a substring of str*/
+
+int findSubstring(char *str, char *substr)
+{
+    int i = 0, j = 0;
+    while ((str[j] != '\0')||(substr[i] != '\0')) {
+	        
+          if (substr[i] != str[j]) {
+			        j++;
+			        i = 0;
+			    }
+	        else {
+			        i++;
+			        j++;
+		 	    }
+	  }
+    if (substr[i] == '\0')
+	      return 1;
+   	else
+ 	      return 0;
+}
