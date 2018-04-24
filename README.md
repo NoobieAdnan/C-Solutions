@@ -1,2 +1,5 @@
 # GE_ASSIGNMENTS
-Sample Codings IOntermediate level for Inter-process Communication
+Sample Codings Intermediate level for Inter-process Communication
+Author - Mohammad Adnan Nasim
+Language - C
+Topics - Inter-process Communication
