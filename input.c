@@ -1,33 +1,20 @@
-#include "sort.h"
-#define NUM_SIZE 10
-#define STR_SIZE 50
-/*int strlen(char * str)
+#include "bst.h"
+/*Function to take input from the User */
+int readint ()
 {
-	int i =0;
-	while(str[i]!='\0'){
-	i++;
-	}
-	return i;
-}
-*/
-
-int readint()
-{
-	char num [NUM_SIZE]= {0};
-	fgets (num, NUM_SIZE, stdin);
-	return atoi(num);
+		char num [NUM_SIZE] = {0} ;
+		fgets (num, NUM_SIZE, stdin) ;
+		return myatoi(num) ;
 }
 
-char readchar()
+/*Function to Implement my own atoi*/
+int myatoi (char *str)
 {
-	char c[NUM_SIZE]= {0};
-	fgets(c,NUM_SIZE,stdin);
-	return c[0];
-}
+		int i , n = 0 ;
 
-void readstring(char * str)
-{
-	fgets(str,STR_SIZE,stdin);
-	str [strlen(str) -1] = '\0';
-	return ;
+		for (i = 0 ; str[i] != '\n'; i++ ) {
+
+				n = (n * 10)  + str[i] - '0' ; 
+		}	
+		return n ;
 }
