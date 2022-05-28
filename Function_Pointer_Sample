@@ -40,3 +40,13 @@ for (ptr = func; *ptr; ++ptr){
 }
     return 0;
 }
+
+
+O/P:
+/tmp/gyfu9A0xkH.o
+8
+0
+reset
+16
+1
+
