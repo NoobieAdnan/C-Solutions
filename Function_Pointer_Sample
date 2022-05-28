@@ -1,0 +1,42 @@
+/*Sample Usage of Function Pointers*/
+
+#include <stdio.h>
+typedef int (init_seq) (int, int);
+int add(int, int);
+int sub(int, int);
+int mul(int, int);
+int divi(int, int);
+
+int add(int a, int b)
+{
+    printf("%d\n",a+b);
+    return (a+b);
+}
+int sub(int a, int b)
+{
+    printf("%d\n",a-b);
+    return (a-b);
+}
+int mul(int a, int b)
+{
+    printf("%d\n",a*b);
+    return (a*b);
+}
+int divi(int a, int b)
+{
+    printf("%d\n",a/b);
+    return (a/b);
+}
+
+int main() {
+int a = 4;
+int b = 4;
+init_seq *func[] = {add,sub,mul,divi,NULL}; 
+init_seq **ptr;
+for (ptr = func; *ptr; ++ptr){
+    if((*ptr)(a,b)==0){
+        printf("reset\n");
+    }
+}
+    return 0;
+}
