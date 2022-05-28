@@ -9,22 +9,18 @@ int divi(int, int);
 
 int add(int a, int b)
 {
-    printf("%d\n",a+b);
     return (a+b);
 }
 int sub(int a, int b)
 {
-    printf("%d\n",a-b);
     return (a-b);
 }
 int mul(int a, int b)
 {
-    printf("%d\n",a*b);
     return (a*b);
 }
 int divi(int a, int b)
 {
-    printf("%d\n",a/b);
     return (a/b);
 }
 
@@ -34,9 +30,7 @@ int b = 4;
 init_seq *func[] = {add,sub,mul,divi,NULL}; 
 init_seq **ptr;
 for (ptr = func; *ptr; ++ptr){
-    if((*ptr)(a,b)==0){
-        printf("reset\n");
-    }
+    printf ("%d\n",(*ptr)(a,b));
 }
     return 0;
 }
@@ -46,7 +40,6 @@ O/P:
 /tmp/gyfu9A0xkH.o
 8
 0
-reset
 16
 1
 
